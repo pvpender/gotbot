@@ -95,7 +95,7 @@ async def nomber(msg: types.message):
          await msg.answer('Отправте текст одним сообщением')
          @dp.message_handler(state=TS.T_S2)
          async def men(msg):
-              f = open(nam,'w')
+              f = open(nam,'w', encoding='windows-1251')
               f.write(msg.text)
               await state.reset_state()
               await msg.answer('Готово!')
