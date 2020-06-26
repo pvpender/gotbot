@@ -33,7 +33,7 @@ async def star(msg: types.message):
 @dp.message_handler(commands=['empire'])
 async def empire(msg: types.message):
     #await msg.answer(com_text[0])
-    f = open('c1.txt')
+    f = open('c1.txt', encoding='windows-1251')
     h = f.read()
     await msg.answer(h)
     f.close()
