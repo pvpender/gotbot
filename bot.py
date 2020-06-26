@@ -23,7 +23,7 @@ dp = Dispatcher(bot, storage=MemoryStorage())
 dp.middleware.setup(LoggingMiddleware())
 
 admi =['898287979']
-com_text = ['p','i','p','l','p','i','p','l']
+#com_text = ['p','i','p','l','p','i','p','l']
 
 @dp.message_handler(commands=['start'])
 async def star(msg: types.message):
@@ -32,28 +32,47 @@ async def star(msg: types.message):
 
 @dp.message_handler(commands=['empire'])
 async def empire(msg: types.message):
-    await msg.answer(com_text[0])
+    #await msg.answer(com_text[0])
+    f = open('c1.txt')
+    h = f.read()
+    await msg.answer(h)
+    f.close()
 
 @dp.message_handler(commands=['nickname'])
 async def nick(msg: types.message):
-    await msg.answer(com_text[1])
+   # await msg.answer(com_text[1])
+    f = open('c1.txt')
+    h = f.read()
+    await msg.answer(h)
+    f.close()
     await msg.answer_photo('')
     await msg.answer_photo('')
     await msg.answer_photo('')
-    await msg.answer(com_text[2])
+   # await msg.answer(com_text[2])
 @dp.message_handler(commands=['history'])
 async def his(msg: types.message):
-    await msg.answer(com_text[3])
+    f = open('c1.txt')
+    h = f.read()
+    await msg.answer(h)
+    f.close()
 
 @dp.message_handler(commands=['game'])
 async def game(msg: types.message):
-    await msg.answer(com_text[4])
-    await msg.answer(com_text[5])
-    await msg.answer(com_text[6])
+    #await msg.answer(com_text[4])
+    #await msg.answer(com_text[5])
+    #await msg.answer(com_text[6])
+    f = open('c1.txt')
+    h = f.read()
+    await msg.answer(h)
+    f.close()
 
 @dp.message_handler(commands=['got'])
 async def got(msg: types.message):
-    await msg.answer(com_text[7])
+    #await msg.answer(com_text[7])
+    f = open('c1.txt')
+    h = f.read()
+    await msg.answer(h)
+    f.close()
 
 
 @dp.message_handler(state='*',commands=['izm'])
@@ -68,17 +87,16 @@ async def iz(msg: types.message):
 @dp.message_handler(state=TS.T_S1)
 async def nomber(msg: types.message):
     state = dp.current_state(user=msg.from_user.id)
-    global a
     a = msg.text
+    nam = 'c'+str(a)+'.txt'
     try:
      if (int(a)>=0) and (int(a)<=7):
          await state.set_state(TS.all()[1])
          await msg.answer('Отправте текст одним сообщением')
          @dp.message_handler(state=TS.T_S2)
          async def men(msg):
-              global com_text
-              global a
-              com_text[int(a)] = msg.text
+              f = open(nam,'w')
+              f.write(msg.text)
               await state.reset_state()
               await msg.answer('Готово!')
 
