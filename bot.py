@@ -6,7 +6,7 @@ from aiogram.contrib.middlewares.logging import LoggingMiddleware
 import random
 import time
 import os
-
+import sqlite3  as sq
 TOKEN = '1200805567:AAEY0_cfflnR-9DlIi7viDs0G4riOdowey4'
 
 logging.basicConfig(level=logging.INFO)
@@ -25,6 +25,17 @@ dp.middleware.setup(LoggingMiddleware())
 admi =['898287979']
 #com_text = ['p','i','p','l','p','i','p','l']
 
+
+con = sq.connect(':memory:')
+curs = con.cursor()
+curs.execute("CREATE TABLE em(id integer, name text)")
+con.commit()
+for i in range(1,9):
+    p = 'lol'
+    con.execute("INSERT INTO em VALUES(?,?)",(i,p))
+
+
+
 @dp.message_handler(commands=['start'])
 async def star(msg: types.message):
     await msg.answer('Бот семейства Game of Thrones')
@@ -32,47 +43,52 @@ async def star(msg: types.message):
 
 @dp.message_handler(commands=['empire'])
 async def empire(msg: types.message):
-    #await msg.answer(com_text[0])
-    f = open('c1.txt', encoding='windows-1251')
-    h = f.read()
-    await msg.answer(h)
-    f.close()
+    curs.execute("SELECT name FROM em WHERE id = 1")
+    r = curs.fetchone()
+    for row in r:
+        await msg.answer(row)
 
 @dp.message_handler(commands=['nickname'])
 async def nick(msg: types.message):
-   # await msg.answer(com_text[1])
-    f = open('c1.txt')
-    h = f.read()
-    await msg.answer(h)
-    f.close()
+    curs.execute("SELECT name FROM em WHERE id = 2")
+    r = curs.fetchone()
+    for row in r:
+        await msg.answer(row)
     await msg.answer_photo('')
     await msg.answer_photo('')
     await msg.answer_photo('')
-   # await msg.answer(com_text[2])
+    curs.execute("SELECT name FROM em WHERE id = 3")
+    r = curs.fetchone()
+    for row in r:
+        await msg.answer(row)
 @dp.message_handler(commands=['history'])
 async def his(msg: types.message):
-    f = open('c1.txt')
-    h = f.read()
-    await msg.answer(h)
-    f.close()
+    curs.execute("SELECT name FROM em WHERE id = 4")
+    r = curs.fetchone()
+    for row in r:
+        await msg.answer(row)
 
 @dp.message_handler(commands=['game'])
 async def game(msg: types.message):
-    #await msg.answer(com_text[4])
-    #await msg.answer(com_text[5])
-    #await msg.answer(com_text[6])
-    f = open('c1.txt')
-    h = f.read()
-    await msg.answer(h)
-    f.close()
+    curs.execute("SELECT name FROM em WHERE id = 5")
+    r = curs.fetchone()
+    for row in r:
+        await msg.answer(row)
+    curs.execute("SELECT name FROM em WHERE id = 6")
+    r = curs.fetchone()
+    for row in r:
+        await msg.answer(row)
+    curs.execute("SELECT name FROM em WHERE id = 7")
+    r = curs.fetchone()
+    for row in r:
+        await msg.answer(row)
 
 @dp.message_handler(commands=['got'])
 async def got(msg: types.message):
-    #await msg.answer(com_text[7])
-    f = open('c1.txt')
-    h = f.read()
-    await msg.answer(h)
-    f.close()
+    curs.execute("SELECT name FROM em WHERE id = 8")
+    r = curs.fetchone()
+    for row in r:
+        await msg.answer(row)
 
 
 @dp.message_handler(state='*',commands=['izm'])
@@ -87,18 +103,20 @@ async def iz(msg: types.message):
 @dp.message_handler(state=TS.T_S1)
 async def nomber(msg: types.message):
     state = dp.current_state(user=msg.from_user.id)
-    a = msg.text
-    nam = 'c'+str(a)+'.txt'
+    global a
+    a = int(msg.text)
     try:
-     if (int(a)>=0) and (int(a)<=7):
+     if (int(a)>=1) and (int(a)<=8):
          await state.set_state(TS.all()[1])
          await msg.answer('Отправте текст одним сообщением')
          @dp.message_handler(state=TS.T_S2)
          async def men(msg):
-              f = open(nam,'w', encoding='windows-1251')
-              f.write(msg.text)
-              await state.reset_state()
-              await msg.answer('Готово!')
+            await msg.answer(a)
+            curs.execute("DELETE FROM em WHERE id = ?",(a,))
+            curs.execute("INSERT INTO em(id, name) VALUES(?,?)",(int(a),msg.text))
+            await state.reset_state()
+            await msg.answer('Готово!')
+
 
      else:
          await msg.answer('Нeверный номер текста! Попробуйте ещё раз!')
