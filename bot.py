@@ -11,6 +11,7 @@ TOKEN = '1200805567:AAEY0_cfflnR-9DlIi7viDs0G4riOdowey4'
 
 logging.basicConfig(level=logging.INFO)
 
+a = 0
 
 class TS(Helper):
     mode = HelperMode.snake_case
@@ -67,6 +68,7 @@ async def iz(msg: types.message):
 @dp.message_handler(state=TS.T_S1)
 async def nomber(msg: types.message):
     state = dp.current_state(user=msg.from_user.id)
+    global a
     a = msg.text
     try:
      if (int(a)>=0) and (int(a)<=7):
@@ -75,6 +77,7 @@ async def nomber(msg: types.message):
          @dp.message_handler(state=TS.T_S2)
          async def men(msg):
               global com_text
+              global a
               com_text[int(a)] = msg.text
               await state.reset_state()
               await msg.answer('Готово!')
